@@ -36,3 +36,9 @@ override.tf.json
 .terraformrc
 terraform.rc
 .terraform.lock.hcl
+
+# SSH
+ssh
+key
+ssh.key
+id_rsa
