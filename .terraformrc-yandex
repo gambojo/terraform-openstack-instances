@@ -1,0 +1,24 @@
+provider_installation {
+    network_mirror {
+        url = "https://terraform-mirror.yandexcloud.net/"
+        include = ["registry.terraform.io/*/*"]
+    }
+    direct {
+        exclude = ["registry.terraform.io/*/*"]
+    }
+
+  dev_overrides {
+    "registry.terraform.io/hashicorp/example" = "https://terraform-mirror.yandexcloud.net/"
+  }
+
+}
+
+#provider_installation {
+#    network_mirror {
+#        url = "terraform-mirror.yandexcloud.net/"
+#        include = ["[#alias|registry.terraform.io/*/|registry.terraform.io/*/]*"]
+#    }
+#    direct {
+#        exclude = ["[#alias|registry.terraform.io/*/|registry.terraform.io/*/]*"]
+#    }
+#}
