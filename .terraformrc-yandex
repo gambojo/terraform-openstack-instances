@@ -1,4 +1,4 @@
-# ~/.terraformrc
+# cp .terraformrc-yandex ~/.terraformrc
 
 provider_installation {
     network_mirror {
