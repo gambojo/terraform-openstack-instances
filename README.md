@@ -1,4 +1,4 @@
-# terraform-vps
+# terraform-openstack-instances
 
 ## Title
 - [Info](#info)
