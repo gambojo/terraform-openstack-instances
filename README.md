@@ -17,15 +17,12 @@
 This simple terraform configuration will help you quickly deploy any number of different or identical instances by specifying a minimum amount of input data.<br />
 Use TF_CLI_CONFIG_FILE=.terraformrc-yandex for define custom config
 #### More
-Default username/password `"terraform/terraform123"`<br />
+Default username/password `"terraform/terraform"`<br />
 We strongly recommend that you use your own password, for example for fast hashing you can use this command:
 ```sh
 echo 'your_password' | openssl passwd -6 -salt 'your_salt' -stdin
 ```
-To display the created private key, use the command:
-```sh
-terraform output --raw private_key
-```
+The created private key saved in default ./ssh.key:
 To display the created floating ip-addresses, use the command:
 ```sh
 terraform output floating_ip
@@ -86,6 +83,8 @@ network = {
 user = {
     name            = string    # required  <any>            Default( terraform )
     hashed_password = string    # required  <password hash>  Default( $6$any_salt$hwzTmq... )
+    ssh_keyname     = string    # required  <any>            Default( ssh.key )
+    ssh_keybits     = number    # required  <rsa bits>       Default( 2048 )
 }
 ```
 ---
@@ -127,6 +126,8 @@ network = {
 user = {
     name            = "user-1",
     hashed_password = "$6$wgdfghbfghgf$3P5TkbGDQ8py4xQFVSqKiT.s6BIQ0kGoIk66vZvY/T/Ijr9XZFCRLa7KB7/bslj/IUVETnfdBMrZknpXHgcqF/"
+    ssh_keyname     = "terraform.pem",
+    ssh_keybits     = 4096
 }
 ```
 - In the [provider.tf](provider.tf) file, define the credentials for connecting to openstack. Example:
