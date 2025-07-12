@@ -9,11 +9,6 @@ data "openstack_images_image_v2" "image" {
   }
 }
 
-# Create key pair
-resource "openstack_compute_keypair_v2" "keypair" {
-  name = "${var.network.net_name}_keypair"
-}
-
 # Create instances
 resource "openstack_compute_instance_v2" "instance" {
   count       = length(var.instances)

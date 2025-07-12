@@ -70,3 +70,8 @@ resource "openstack_networking_port_secgroup_associate_v2" "port_secgroup_associ
   security_group_ids = [openstack_networking_secgroup_v2.secgroup.id]
   depends_on = [openstack_networking_secgroup_rule_v2.secgroup_rules]
 }
+
+# Output floating ip addresses
+output "floating_ip" {
+  value = [for fip in openstack_networking_floatingip_v2.fip : fip.address]
+}

@@ -65,11 +65,15 @@ variable "network" {
 variable "user" {
   type = object({
     name            = string,
-    hashed_password = string
+    hashed_password = string,
+    ssh_keyname     = string,
+    ssh_keybits     = number
   })
 
   default = {
     name            = "terraform",
-    hashed_password = "$6$any_salt$hwzTmqWFVZOgxgMB5LeaFoA2hkb.xujnbNiMQ/50shLK25XrnvdzXtKeh1yn/7Ve9OZ2k1g2fJQ3CJYiYCrf8."
+    hashed_password = "$6$wR4oAQpN8cP6y3S0$UL5MhgyFpksZf4n7oZSk9wDdtJadPxUeL1ZYxjrDann/5IR8NbUEttCLuciopdzFGc6OjTzQ0oUtvKd/uQ55D0"
+    ssh_keyname     = "ssh.key",
+    ssh_keybits     = 2048
   }
 }
