@@ -168,4 +168,3 @@ Providers:
 - [external](https://registry.terraform.io/providers/hashicorp/external)
 - [template](https://registry.terraform.io/providers/hashicorp/template/latest)
 - [tls](https://registry.terraform.io/providers/hashicorp/tls)
-- [null](https://registry.terraform.io/providers/hashicorp/null)
