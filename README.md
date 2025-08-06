@@ -164,8 +164,8 @@ terraform init
 [Terraform](https://releases.hashicorp.com/terraform) >= [v1.5.4](https://releases.hashicorp.com/terraform/1.5.4/) <br />
 Providers:
 - [openstack](https://registry.terraform.io/providers/terraform-provider-openstack/openstack) >= [3.0.0](https://registry.terraform.io/providers/terraform-provider-openstack/openstack/3.0.0)
-- [template](https://registry.terraform.io/providers/hashicorp/template/latest) >= [2.2.0](https://registry.terraform.io/providers/hashicorp/template/2.2.0)
-- [null](https://registry.terraform.io/providers/hashicorp/null) >= [3.2.3](https://registry.terraform.io/providers/hashicorp/null/3.2.3)
-- [local](https://registry.terraform.io/providers/hashicorp/local) >= [2.5.3](https://registry.terraform.io/providers/hashicorp/local/2.5.3)
-- [external](https://registry.terraform.io/providers/hashicorp/external) >= [2.3.5](https://registry.terraform.io/providers/hashicorp/external/2.3.5)
-- [tls](https://registry.terraform.io/providers/hashicorp/tls) >= [4.1.0](https://registry.terraform.io/providers/hashicorp/tls/4.1.0)
+- [local](https://registry.terraform.io/providers/hashicorp/local)
+- [external](https://registry.terraform.io/providers/hashicorp/external)
+- [template](https://registry.terraform.io/providers/hashicorp/template/latest)
+- [tls](https://registry.terraform.io/providers/hashicorp/tls)
+- [null](https://registry.terraform.io/providers/hashicorp/null)
