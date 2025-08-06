@@ -161,8 +161,8 @@ terraform init
 <br />
 
 ## Requirements
-[Terraform](https://releases.hashicorp.com/terraform) >= [v1.5.4](https://releases.hashicorp.com/terraform/1.5.4/) <br />
-Providers:
+[Terraform](https://releases.hashicorp.com/terraform) >= [v1.5.4](https://releases.hashicorp.com/terraform/1.5.4/)
+#### Providers:
 - [openstack](https://registry.terraform.io/providers/terraform-provider-openstack/openstack) >= [3.0.0](https://registry.terraform.io/providers/terraform-provider-openstack/openstack/3.0.0)
 - [local](https://registry.terraform.io/providers/hashicorp/local)
 - [external](https://registry.terraform.io/providers/hashicorp/external)
