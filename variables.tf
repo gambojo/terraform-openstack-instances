@@ -17,6 +17,20 @@ variable "instances" {
   ]
 }
 
+variable "instance_defaults" {
+  type = object({
+    image       = string,
+    flavor      = string,
+    volume_size = number
+  })
+
+  default = {
+    image       = "debian-12.5.0"
+    flavor      = "2-4-0"
+    volume_size = 10
+  }
+}
+
 # Security group rules
 variable "secgroup_rules" {
   type = list(object({
@@ -65,14 +79,14 @@ variable "network" {
 variable "user" {
   type = object({
     name            = string,
-    hashed_password = string,
-    ssh_keyname     = string,
-    ssh_keybits     = number
+    password        = string,
+    ssh_keyname     = optional(string),
+    ssh_keybits     = optional(number)
   })
 
   default = {
     name            = "terraform",
-    hashed_password = "$6$wR4oAQpN8cP6y3S0$UL5MhgyFpksZf4n7oZSk9wDdtJadPxUeL1ZYxjrDann/5IR8NbUEttCLuciopdzFGc6OjTzQ0oUtvKd/uQ55D0"
+    password        = "terraform",
     ssh_keyname     = "ssh.key",
     ssh_keybits     = 2048
   }

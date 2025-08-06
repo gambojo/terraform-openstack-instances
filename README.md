@@ -18,11 +18,7 @@ This simple terraform configuration will help you quickly deploy any number of d
 Use TF_CLI_CONFIG_FILE=.terraformrc-yandex for define custom config
 #### More
 Default username/password `"terraform/terraform"`<br />
-We strongly recommend that you use your own password, for example for fast hashing you can use this command:
-```sh
-echo 'your_password' | openssl passwd -6 -salt 'your_salt' -stdin
-```
-The created private key saved in default ./ssh.key:
+The created private key saved in default ./ssh.key<br />
 To display the created floating ip-addresses, use the command:
 ```sh
 terraform output floating_ip
@@ -34,7 +30,8 @@ terraform output floating_ip
 ### General description of variables
 | Name | Description | Type |
 |---|---|---|
-| instances | Instance parameters | list(object) |
+| instances | Instance names and parameters (optional) | list(object) |
+| instance_defaults | default instance parameters (required) | object |
 | secgroup_rules | Security group rules | list(object) |
 | network | Network parameters | object |
 | user | User parameters | object |
@@ -50,6 +47,15 @@ instances = [
         volume_size = number    # optional  <any>            Default( 10 )
     }
 ]
+```
+
+- instance_defaults
+```hcl
+instance_defaults = {
+    image       = string    # required  <any>            Default( debian-12.5.0 )
+    flavor      = string    # required  <any>            Default( 2-4-0 )
+    volume_size = number    # required  <any>            Default( 10 )
+}
 ```
 
 - secgroup_rules
@@ -82,9 +88,9 @@ network = {
 ```hcl
 user = {
     name            = string    # required  <any>            Default( terraform )
-    hashed_password = string    # required  <password hash>  Default( $6$any_salt$hwzTmq... )
-    ssh_keyname     = string    # required  <any>            Default( ssh.key )
-    ssh_keybits     = number    # required  <rsa bits>       Default( 2048 )
+    password = string    # required  <password hash>  Default( terraform )
+    ssh_keyname     = string    # optional  <any>            Default( ssh.key )
+    ssh_keybits     = number    # optional  <rsa bits>       Default( 2048 )
 }
 ```
 ---
@@ -94,6 +100,12 @@ user = {
 - Create a file called `terraform.tfvars`
 - Populate the file with variables to override defaults. Example:
 ```hcl
+instance_defaults = {
+  image       = "debian-12.5.0"
+  flavor      = "4-8-0"
+  volume_size = 10
+}
+
 instances = [
     { name = "example-instance-1" },
     { name = "example-instance-2" },
@@ -125,7 +137,7 @@ network = {
 
 user = {
     name            = "user-1",
-    hashed_password = "$6$wgdfghbfghgf$3P5TkbGDQ8py4xQFVSqKiT.s6BIQ0kGoIk66vZvY/T/Ijr9XZFCRLa7KB7/bslj/IUVETnfdBMrZknpXHgcqF/"
+    password        = "Dwefufvhdf5632rvdG"
     ssh_keyname     = "terraform.pem",
     ssh_keybits     = 4096
 }
@@ -154,4 +166,6 @@ Providers:
 - [openstack](https://registry.terraform.io/providers/terraform-provider-openstack/openstack) >= [3.0.0](https://registry.terraform.io/providers/terraform-provider-openstack/openstack/3.0.0)
 - [template](https://registry.terraform.io/providers/hashicorp/template/latest) >= [2.2.0](https://registry.terraform.io/providers/hashicorp/template/2.2.0)
 - [null](https://registry.terraform.io/providers/hashicorp/null) >= [3.2.3](https://registry.terraform.io/providers/hashicorp/null/3.2.3)
-- [local](https://registry.terraform.io/providers/hashicorp/local) >= [2.5.2](https://registry.terraform.io/providers/hashicorp/local/2.5.2)
+- [local](https://registry.terraform.io/providers/hashicorp/local) >= [2.5.3](https://registry.terraform.io/providers/hashicorp/local/2.5.3)
+- [external](https://registry.terraform.io/providers/hashicorp/external) >= [2.3.5](https://registry.terraform.io/providers/hashicorp/external/2.3.5)
+- [tls](https://registry.terraform.io/providers/hashicorp/tls) >= [4.1.0](https://registry.terraform.io/providers/hashicorp/tls/4.1.0)
