@@ -1,5 +1,5 @@
 # Create key pair for user
-resource "tls_private_key" "ssh_key" {
+resource "tls_private_key" "ssh_keypair" {
   algorithm = "RSA"
   rsa_bits = coalesce(
     var.user.ssh_keybits,
@@ -8,14 +8,14 @@ resource "tls_private_key" "ssh_key" {
 }
 
 # Export users public key to openstack
-resource "openstack_compute_keypair_v2" "keypair" {
+resource "openstack_compute_keypair_v2" "public_key" {
   name       = "${var.network.net_name}_keypair"
-  public_key = tls_private_key.ssh_key.public_key_openssh
+  public_key = tls_private_key.ssh_keypair.public_key_openssh
 }
 
 # Import users private key to local file
 resource "local_file" "private_key" {
-  content  = tls_private_key.ssh_key.private_key_pem
+  content  = tls_private_key.ssh_keypair.private_key_pem
   filename = "${path.module}/outputs/${coalesce(
     var.user.ssh_keyname,
     "ssh.key"
@@ -38,6 +38,6 @@ data "template_file" "user_data" {
   vars = {
     user_name     = var.user.name
     user_password = data.external.password_hasher.result.hash
-    public_key    = openstack_compute_keypair_v2.keypair.public_key
+    public_key    = openstack_compute_keypair_v2.public_key.public_key
   }
 }
