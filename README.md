@@ -16,10 +16,12 @@
 #### Description
 This simple terraform configuration will help you quickly deploy any number of different or identical instances by specifying a minimum amount of input data.<br />
 Use TF_CLI_CONFIG_FILE=.terraformrc-yandex for define custom config
+
 #### More
 Default username/password `"terraform/terraform"`<br />
 The created private key saved in default `./output/ssh.key`<br />
 Instance info saved in inventory file for ansible in `./output/invertory.yml`
+
 ---
 <br />
 
