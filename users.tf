@@ -7,33 +7,33 @@ resource "tls_private_key" "ssh_key" {
   )
 }
 
-# Import users key pair to openstack
+# Export users public key to openstack
 resource "openstack_compute_keypair_v2" "keypair" {
   name       = "${var.network.net_name}_keypair"
   public_key = tls_private_key.ssh_key.public_key_openssh
 }
 
-# Save users key pair to file
+# Import users private key to local file
 resource "local_file" "private_key" {
   content  = tls_private_key.ssh_key.private_key_pem
-  filename = "${path.module}/${coalesce(
+  filename = "${path.module}/outputs/${coalesce(
     var.user.ssh_keyname,
     "ssh.key"
   )}"
   file_permission = "0600"
 }
 
-# Hashing plain password
+# Hashing users password
 data "external" "password_hasher" {
-  program = ["bash", "${path.module}/pwhasher.sh"]
+  program = ["bash", "${path.module}/templates/pwhasher.sh"]
   query = {
     password = var.user.password
   }
 }
 
-# User settings configuration template
+# Create user via cloud-config
 data "template_file" "user_data" {
-  template = file("${path.module}/user_data.tpl")
+  template = file("${path.module}/templates/users.tpl")
 
   vars = {
     user_name     = var.user.name

@@ -3,7 +3,7 @@ data "openstack_networking_network_v2" "external_network" {
   name = var.network.extnet_name
 }
 
-# Create network
+# Create internal network
 resource "openstack_networking_network_v2" "network" {
   name           = "${var.network.net_name}_network"
   admin_state_up = "true"
@@ -11,7 +11,7 @@ resource "openstack_networking_network_v2" "network" {
   shared         = "false"
 }
 
-# Create subnet
+# Create subnet in internal network
 resource "openstack_networking_subnet_v2" "subnet" {
   name            = "${var.network.net_name}_subnet"
   network_id      = openstack_networking_network_v2.network.id
@@ -23,7 +23,7 @@ resource "openstack_networking_subnet_v2" "subnet" {
   depends_on      = [openstack_networking_network_v2.network]
 }
 
-# Create router
+# Create router for internal network
 resource "openstack_networking_router_v2" "router" {
   name                = "${var.network.net_name}_router"
   admin_state_up      = true
@@ -31,21 +31,14 @@ resource "openstack_networking_router_v2" "router" {
   depends_on          = [openstack_networking_subnet_v2.subnet]
 }
 
-# Create router interfaces
+# Create router interface
 resource "openstack_networking_router_interface_v2" "router_interface" {
   router_id  = openstack_networking_router_v2.router.id
   subnet_id  = openstack_networking_subnet_v2.subnet.id
   depends_on = [openstack_networking_router_v2.router]
 }
 
-# Create floating ip`s
-resource "openstack_networking_floatingip_v2" "fip" {
-  count      = length(var.instances)
-  pool       = var.network.extnet_name
-  depends_on = [openstack_networking_router_interface_v2.router_interface]
-}
-
-# Create ports
+# Create network ports
 resource "openstack_networking_port_v2" "port" {
   count          = length(var.instances)
   name           = var.instances[count.index].name
@@ -54,7 +47,14 @@ resource "openstack_networking_port_v2" "port" {
   depends_on     = [openstack_networking_subnet_v2.subnet]
 }
 
-# Associate floating ip`s with ports
+# Create floating ip addresses from external network
+resource "openstack_networking_floatingip_v2" "fip" {
+  count      = length(var.instances)
+  pool       = var.network.extnet_name
+  depends_on = [openstack_networking_router_interface_v2.router_interface]
+}
+
+# Associate floating ip addresses with network ports
 resource "openstack_networking_floatingip_associate_v2" "fip_associate" {
   count       = length(var.instances)
   floating_ip = openstack_networking_floatingip_v2.fip[count.index].address
@@ -62,16 +62,11 @@ resource "openstack_networking_floatingip_associate_v2" "fip_associate" {
   depends_on  = [openstack_networking_floatingip_v2.fip]
 }
 
-# Associate ports with security group
+# Associate network ports with security group
 resource "openstack_networking_port_secgroup_associate_v2" "port_secgroup_associate" {
   count   = length(var.instances)
   port_id = openstack_networking_port_v2.port[count.index].id
   enforce = "true"
   security_group_ids = [openstack_networking_secgroup_v2.secgroup.id]
   depends_on = [openstack_networking_secgroup_rule_v2.secgroup_rules]
-}
-
-# Output floating ip addresses
-output "floating_ip" {
-  value = [for fip in openstack_networking_floatingip_v2.fip : fip.address]
 }

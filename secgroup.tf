@@ -1,10 +1,10 @@
-# security group
+# Create security group
 resource "openstack_networking_secgroup_v2" "secgroup" {
   name        = "${var.network.net_name}_secgroup"
   description = "${var.network.net_name}_secgroup"
 }
 
-# security group rules
+# Configure security group rules
 resource "openstack_networking_secgroup_rule_v2" "secgroup_rules" {
   count             = length(var.secgroup_rules)
   direction         = coalesce(var.secgroup_rules[count.index].direction, "ingress")

@@ -41,3 +41,13 @@ ssh
 key
 ssh.key
 id_rsa
+
+# Ignore outputs
+*.yml
+*.yaml
+outputs/*.yaml
+outputs/*.yml
+outputs/*.key
+outputs/*.pem
+outputs/*.ssh
+outputs/id_rsa

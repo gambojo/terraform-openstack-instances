@@ -17,6 +17,7 @@ variable "instances" {
   ]
 }
 
+# Default instance properties
 variable "instance_defaults" {
   type = object({
     image       = string,

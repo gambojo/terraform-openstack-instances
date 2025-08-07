@@ -47,3 +47,36 @@ resource "openstack_compute_instance_v2" "instance" {
     openstack_networking_port_v2.port
   ]
 }
+
+# Get information of instances
+locals {
+  instances_info = {
+    for idx, instance in openstack_compute_instance_v2.instance :
+    instance.name => {
+      external_ip = openstack_networking_floatingip_v2.fip[idx].address
+      internal_ip = instance.network[0].fixed_ip_v4
+    }
+  }
+
+  depends_on = [
+    openstack_compute_instance_v2.instance,
+    openstack_networking_floatingip_associate_v2.fip_associate
+  ]
+}
+
+# Import instances info to invertory file for ansible in ./outputs/
+resource "local_file" "invertory" {
+  filename = "${path.module}/outputs/invertory.yml"
+  file_permission = "0644"
+  content = templatefile("${path.module}/templates/inventory.tpl", {
+    timestamp = formatdate("DD-MM-YYYY hh:mm:ss", timestamp())
+    username  = var.user.name
+    ssh_key   = abspath("${path.module}/outputs/ssh.key")
+    instances = local.instances_info
+  })
+}
+
+# Output info
+output "info" {
+  value = "ssh private key and ansible inventory with info about connection saved in  ./outputs/ directory!"
+}
