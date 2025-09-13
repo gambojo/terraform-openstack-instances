@@ -87,7 +87,7 @@ network = {
 ```hcl
 user = {
     name            = string    # required  <any>            Default( terraform )
-    password = string    # required  <password hash>  Default( terraform )
+    password        = string    # required  <password hash>  Default( terraform )
     ssh_keyname     = string    # optional  <any>            Default( ssh.key )
     ssh_keybits     = number    # optional  <rsa bits>       Default( 2048 )
 }
